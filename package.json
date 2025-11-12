@@ -36,7 +36,6 @@
     "@mantine/modals": "^6.0.16",
     "@mantine/next": "^6.0.16",
     "@mantine/notifications": "^6.0.16",
-    "@prisma/client": "^5.0.0",
     "@sendgrid/mail": "^7.4.2",
     "@sentry/node": "^6.3.1",
     "@sentry/tracing": "^6.3.1",
@@ -45,7 +44,6 @@
     "class-validator": "^0.13.1",
     "cors": "^2.8.5",
     "dayjs": "^1.10.4",
-    "formidable": "^1.2.2",
     "framer-motion": "^3.2.1",
     "jsonwebtoken": "^8.5.1",
     "markdown-it": "^12.0.6",
@@ -76,14 +74,16 @@
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-decorators": "^7.12.12",
     "@egoist/prettier-config": "^0.1.0",
+    "@prisma/client": "^6.19.0",
     "@types/node": "^14.14.21",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "babel-plugin-transform-typescript-metadata": "^0.3.1",
+    "formidable": "^3.5.4",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
-    "prisma": "^5.0.0",
+    "prisma": "^6.19.0",
     "typegraphql-prisma": "^0.9.4",
-    "typescript": "^4.8.2"
+    "typescript": "^5.4.5"
   }
 }

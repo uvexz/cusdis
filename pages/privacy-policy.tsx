@@ -8,6 +8,7 @@ function PrivacyPolicyPage() {
     <>
       <Head title="Privacy Policy | Cusdis"></Head>
       <NextHead>
+        <meta name="description" content="Privacy Policy for Cusdis" />
       </NextHead>
       <Container>
 

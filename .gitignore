@@ -75,6 +75,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+pnpm-lock.yaml
 
 # TypeScript v1 declaration files
 typings/
@@ -164,3 +165,6 @@ db.sqlite
 public/js
 widget/index.html
 db.sqlite-journal
+
+# AI
+.claude/
