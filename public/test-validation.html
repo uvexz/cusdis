@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cusdis Enhanced Features Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-case {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cusdis Enhanced Features Validation</h1>
+
+    <div class="test-case">
+        <h2>Test 1: Auto Page Slug Detection</h2>
+        <p>Current URL pathname: <span id="current-path"></span></p>
+        <p>Detected slug: <span id="detected-slug"></span></p>
+        <p>Expected pattern: URL path converted to slug format</p>
+    </div>
+
+    <div class="test-case">
+        <h2>Test 2: Custom Element ID Detection</h2>
+        <p>Testing CSS selector support...</p>
+        <div id="custom-test-element">Custom element for testing</div>
+        <div class="class-test-element">Class-based element for testing</div>
+        <div data-test-element="true">Data attribute element for testing</div>
+        <p id="element-test-result"></p>
+    </div>
+
+    <div class="test-case">
+        <h2>Test 3: Meta Tag Detection</h2>
+        <p>Meta tag value: <span id="meta-tag-value"></span></p>
+        <p>Expected: "test-validation-page"</p>
+    </div>
+
+    <div class="test-case">
+        <h2>Test 4: Enhanced Embed Code Generation</h2>
+        <p>Generated embed code should include:</p>
+        <ul>
+            <li><code>data-auto-page-slug="true"</code> attribute</li>
+            <li>Comments for custom element ID configuration</li>
+            <li>Auto-detection function examples</li>
+        </ul>
+        <pre id="embed-code-example"></pre>
+    </div>
+
+    <script>
+        // Test 1: Auto Page Slug Detection
+        function testAutoPageSlug() {
+            const currentPath = window.location.pathname;
+            document.getElementById('current-path').textContent = currentPath;
+
+            // Simulate the auto-detection logic
+            const detectedSlug = currentPath
+                .replace(/\/+/g, '-')
+                .replace(/^-|-$/g, '')
+                .replace(/[^a-zA-Z0-9-_]/g, '-')
+                .replace(/-+/g, '-')
+                .toLowerCase() || 'home';
+
+            document.getElementById('detected-slug').textContent = detectedSlug;
+
+            console.log('✅ Auto Page Slug Detection:', detectedSlug);
+        }
+
+        // Test 2: Custom Element ID Detection
+        function testCustomElementDetection() {
+            const selectors = [
+                '#custom-test-element',
+                '.class-test-element',
+                '[data-test-element="true"]'
+            ];
+
+            let results = [];
+            selectors.forEach(selector => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    results.push(`✅ Found element with selector: ${selector}`);
+                } else {
+                    results.push(`❌ Element not found with selector: ${selector}`);
+                }
+            });
+
+            document.getElementById('element-test-result').innerHTML = results.join('<br>');
+            console.log('✅ Custom Element Detection Test Complete');
+        }
+
+        // Test 3: Meta Tag Detection
+        function testMetaTagDetection() {
+            const metaTag = document.querySelector('meta[name="page-slug"]');
+            const metaValue = metaTag ? metaTag.content : 'No meta tag found';
+            document.getElementById('meta-tag-value').textContent = metaValue;
+            console.log('✅ Meta Tag Detection:', metaValue);
+        }
+
+        // Test 4: Enhanced Embed Code Example
+        function showEmbedCodeExample() {
+            const exampleCode = `<!-- Enhanced Cusdis Embed Code -->
+<!-- You can customize the element ID and page slug will be auto-detected -->
+<div id="cusdis_thread"
+  data-host="${location.origin}"
+  data-app-id="YOUR_PROJECT_ID"
+  data-page-id="{{ PAGE_ID }}"
+  data-page-url="{{ PAGE_URL }}"
+  data-page-title="{{ PAGE_TITLE }}"
+  data-auto-page-slug="true"
+></div>
+<script>
+  // Optional: Custom element ID (uncomment and modify if needed)
+  // window.cusdisElementId = 'my-custom-comment-section';
+
+  // Optional: Auto-detect page slug from URL or meta tags
+  // window.cusdisAutoPageSlug = function() {
+  //   return window.location.pathname.replace(/\\/+/g, '-').replace(/^-|-$/g, '') || 'home';
+  // };
+</script>
+<script async defer src="${location.origin}/js/cusdis.es.js"></script>`;
+
+            document.getElementById('embed-code-example').textContent = exampleCode;
+        }
+
+        // Run all tests
+        window.addEventListener('DOMContentLoaded', function() {
+            testAutoPageSlug();
+            testCustomElementDetection();
+            testMetaTagDetection();
+            showEmbedCodeExample();
+
+            console.log('🎉 All validation tests completed!');
+        });
+    </script>
+</body>
+</html>

@@ -189,13 +189,33 @@ export function MainLayout(props: {
   }, [])
 
   const openEmbededCodeModal = React.useCallback(() => {
-    const code = `<div id="cusdis_thread"
+    const code = `<!-- Enhanced Cusdis Embed Code -->
+<!-- You can customize the element ID and page slug will be auto-detected -->
+<div id="cusdis_thread"
   data-host="${location.origin}"
   data-app-id="${props.project.id}"
   data-page-id="{{ PAGE_ID }}"
   data-page-url="{{ PAGE_URL }}"
   data-page-title="{{ PAGE_TITLE }}"
+  data-auto-page-slug="true"
 ></div>
+<script>
+  // Optional: Custom element ID (uncomment and modify if needed)
+  // window.cusdisElementId = 'my-custom-comment-section';
+
+  // Optional: Auto-detect page slug from URL or meta tags
+  // window.cusdisAutoPageSlug = function() {
+  //   // Method 1: From URL pathname
+  //   return window.location.pathname.replace(/\\/+/g, '-').replace(/^-|-$/g, '') || 'home';
+  //
+  //   // Method 2: From meta tag
+  //   // return document.querySelector('meta[name="page-slug"]')?.content || 'default';
+  //
+  //   // Method 3: From canonical URL
+  //   // const canonical = document.querySelector('link[rel="canonical"]')?.href;
+  //   // return canonical ? new URL(canonical).pathname : window.location.pathname;
+  // };
+</script>
 <script async defer src="${location.origin}/js/cusdis.es.js"></script>
 `
 

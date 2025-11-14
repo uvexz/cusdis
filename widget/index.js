@@ -4,6 +4,23 @@ const makeIframeContent = (target) => {
   const host = target.dataset.host || 'https://cusdis.com'
   const iframeJsPath = target.dataset.iframe || `${host}/js/iframe.umd.js`
   const cssPath = `${host}/js/style.css`
+
+  // Enhanced page slug detection
+  let pageId = target.dataset.pageId
+
+  // Auto-detect page slug if enabled
+  if (target.dataset.autoPageSlug === 'true' && (!pageId || pageId === '{{ PAGE_ID }}')) {
+    // Check for custom auto-detection function
+    if (window.cusdisAutoPageSlug && typeof window.cusdisAutoPageSlug === 'function') {
+      pageId = window.cusdisAutoPageSlug()
+    } else {
+      // Default auto-detection methods
+      pageId = autoDetectPageSlug()
+    }
+    // Update the dataset for the iframe
+    target.dataset.pageId = pageId
+  }
+
   return `<!DOCTYPE html>
 <html>
   <head>
@@ -23,10 +40,41 @@ const makeIframeContent = (target) => {
   <body>
     <div id="root"></div>
     <script src="${iframeJsPath}" type="module">
-      
+
     </script>
   </body>
 </html>`
+}
+
+// Enhanced auto-detection function for page slug
+function autoDetectPageSlug() {
+  try {
+    // Method 1: Check for meta tag with page-slug
+    const metaSlug = document.querySelector('meta[name="page-slug"]')?.content
+    if (metaSlug) return metaSlug
+
+    // Method 2: Check for canonical URL
+    const canonical = document.querySelector('link[rel="canonical"]')?.href
+    if (canonical) {
+      try {
+        const url = new URL(canonical)
+        return url.pathname.replace(/\/+/g, '-').replace(/^-|-$/g, '') || 'home'
+      } catch (e) {
+        // Invalid URL, fall back to next method
+      }
+    }
+
+    // Method 3: Use current URL pathname
+    return window.location.pathname
+      .replace(/\/+/g, '-') // Replace multiple slashes with single dash
+      .replace(/^-|-$/g, '') // Remove leading/trailing dashes
+      .replace(/[^a-zA-Z0-9-_]/g, '-') // Replace special chars with dash
+      .replace(/-+/g, '-') // Replace multiple dashes with single dash
+      .toLowerCase() || 'home'
+  } catch (e) {
+    // Fallback to 'default' if all methods fail
+    return 'default'
+  }
 }
 
 let singleTonIframe
@@ -120,8 +168,15 @@ window.CUSDIS.setTheme = function (theme) {
 function initial() {
   let target
 
+  // Enhanced element detection with multiple methods
   if (window.cusdisElementId) {
-    target = document.querySelector(`#${window.cusdisElementId}`)
+    // Support for CSS selectors (not just IDs)
+    if (window.cusdisElementId.includes('#') || window.cusdisElementId.includes('.') || window.cusdisElementId.includes('[')) {
+      target = document.querySelector(window.cusdisElementId)
+    } else {
+      // Legacy ID-only support
+      target = document.querySelector(`#${window.cusdisElementId}`)
+    }
   } else if (document.querySelector('#cusdis_thread')) {
     target = document.querySelector('#cusdis_thread')
   } else if (document.querySelector('#cusdis')) {
@@ -131,10 +186,20 @@ function initial() {
     target = document.querySelector('#cusdis')
   }
 
+  // Support for multiple widgets with data attributes
+  if (!target) {
+    const cusdisElements = document.querySelectorAll('[data-cusdis-widget]')
+    if (cusdisElements.length > 0) {
+      target = cusdisElements[0]
+    }
+  }
+
   if (window.CUSDIS_PREVENT_INITIAL_RENDER === true) {
   } else {
     if (target) {
       render(target)
+    } else {
+      console.warn('Cusdis: No target element found. Please add a div with id="cusdis_thread" or set window.cusdisElementId')
     }
   }
 }

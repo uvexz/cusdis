@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Cusdis Embed Test</title>
+    <meta name="page-slug" content="test-enhanced-embed">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .comment-section {
+            margin-top: 40px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+        }
+        .custom-comments {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .test-container {
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enhanced Cusdis Embed Test Page</h1>
+    <p>This page demonstrates the enhanced Cusdis embedding functionality.</p>
+
+    <h2>Test 1: Default Element (ID: cusdis_thread)</h2>
+    <p>This uses the standard cusdis_thread element with auto page slug detection.</p>
+    <div id="cusdis_thread"
+        data-host="http://localhost:3000"
+        data-app-id="test-project-id"
+        data-auto-page-slug="true"
+        data-page-url="http://localhost:3000/test-enhanced-embed.html"
+        data-page-title="Enhanced Cusdis Embed Test"
+    ></div>
+
+    <h2>Test 2: Custom Element with CSS Selector</h2>
+    <p>This uses a custom element with class name targeting.</p>
+    <div class="comment-section">
+        <h3>Custom Comment Section</h3>
+        <p>Comments will be rendered here using CSS selector targeting.</p>
+    </div>
+
+    <h2>Test 3: Data Attribute Targeting</h2>
+    <p>This uses data attribute targeting for the comment container.</p>
+    <div data-comments="cusdis" class="custom-comments">
+        <h3>Data Attribute Targeted Comments</h3>
+        <p>Comments will be rendered here using data attribute targeting.</p>
+    </div>
+
+    <h2>Test 4: Custom Page Slug Function</h2>
+    <p>This demonstrates custom page slug detection.</p>
+    <div id="custom-slug-test" class="test-container">
+        <h3>Custom Slug Detection</h3>
+        <p>This will use a custom function to generate the page slug.</p>
+    </div>
+
+    <h2>Test 5: Manual Page ID</h2>
+    <p>This uses a manually specified page ID.</p>
+    <div id="manual-page-id" class="test-container">
+        <h3>Manual Page ID</h3>
+        <p>This uses a specific page ID instead of auto-detection.</p>
+    </div>
+
+    <script>
+        // Test 2: Custom element with CSS selector
+        window.cusdisElementId = '.comment-section';
+
+        // Reset for other tests
+        setTimeout(() => {
+            // Test 3: Data attribute targeting
+            window.cusdisElementId = '[data-comments="cusdis"]';
+            window.CUSDIS.initial();
+
+            // Test 4: Custom page slug function
+            setTimeout(() => {
+                window.cusdisElementId = '#custom-slug-test';
+                window.cusdisAutoPageSlug = function() {
+                    return 'custom-generated-slug-' + Date.now();
+                };
+                window.CUSDIS.initial();
+
+                // Test 5: Manual page ID
+                setTimeout(() => {
+                    window.cusdisElementId = '#manual-page-id';
+                    window.cusdisAutoPageSlug = null; // Disable auto detection
+                    // Manually set the page ID
+                    document.querySelector('#manual-page-id').dataset.pageId = 'manual-test-page-id';
+                    window.CUSDIS.initial();
+                }, 1000);
+            }, 1000);
+        }, 1000);
+    </script>
+
+    <script async defer src="/js/cusdis.es.js"></script>
+</body>
+</html>
